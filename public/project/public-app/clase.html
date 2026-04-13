@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="images/unnamed.png">
+    <title>Cachimboz Clase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://www.youtube-nocookie.com">
+    <link rel="preconnect" href="https://i.ytimg.com">
+    <link rel="dns-prefetch" href="https://www.youtube-nocookie.com">
+    <link rel="dns-prefetch" href="https://i.ytimg.com">
+    <link rel="preconnect" href="https://www.youtube.com">
+    <link rel="preconnect" href="https://www.googlevideo.com">
+    <link rel="stylesheet" href="./css/clase.css">
+    <link rel="stylesheet" href="./css/header.css">
+
+
+   
+</head>
+
+<body>
+
+    <header id="shared-header" class="header"></header>
+
+    <div class="overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title-row">
+                <span id="sidebar-course-name">Curso</span>
+                <i class="fas fa-times" onclick="toggleSidebar()" style="cursor:pointer; padding:5px;"></i>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="sidebar-progress-fill"></div>
+                </div>
+                <span class="progress-text" id="sidebar-progress-text">0%</span>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('temario')" id="tab-temario">Temario</button>
+                <button class="tab-btn" onclick="switchTab('favoritos')" id="tab-favoritos">Favoritos</button>
+            </div>
+        </div>
+        <div class="module-list" id="sidebar-content"></div>
+    </div>
+
+    <div class="main-container">
+        <div class="video-wrapper">
+            <div id="video-container"></div>
+        </div>
+        <div class="content-area">
+            <div class="video-header-row">
+                <h1 class="video-title" id="video-title">Cargando...</h1>
+                <button class="main-fav-btn" id="current-fav-btn" onclick="toggleCurrentFavorite()">
+                    <i class="far fa-heart"></i>
+                </button>
+            </div>
+            <div class="video-meta">
+                <span class="module-pill" id="module-name">Módulo 1</span>
+                <span><i class="far fa-check-circle"></i> Lección <span id="lesson-index">1</span></span>
+            </div>
+            <div class="actions-grid" id="actions-grid">
+                <div class="action-card" onclick="attemptStartQuiz()">
+                    <div id="quiz-lock" class="lock-overlay" style="display:none;"><i class="fas fa-lock"></i></div>
+                    <div class="action-icon t-quiz"><i class="fas fa-brain"></i></div>
+                    <div style="font-weight:700; font-size:15px; color:white;">Banco Preguntas</div>
+                    <div style="font-size:11px; opacity:0.7; color:var(--text-sec);" id="quiz-subtitle">Práctica
+                        Intensiva</div>
+                </div>
+                <div class="action-card" id="pdf-card" onclick="openPDF()">
+                    <div id="pdf-lock" class="lock-overlay"><i class="fas fa-lock"></i></div>
+                    <div class="action-icon t-pdf"><i class="fas fa-file-pdf"></i></div>
+                    <div style="font-weight:700; font-size:15px; color:white;">Resumen PDF</div>
+                    <div style="font-size:11px; opacity:0.7; color:var(--text-sec);">Material Premium</div>
+                </div>
+            </div>
+            <div class="nav-grid">
+                <button class="nav-btn" id="btn-prev" onclick="prevLesson()"><i class="fas fa-arrow-left"></i>
+                    Anterior</button>
+                <button class="nav-btn" id="btn-next" onclick="nextLesson()">Siguiente <i
+                        class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="sales-overlay" onclick="closeSales()"></div>
+    <div class="sales-modal" id="sales-modal">
+        <div class="sales-header">
+            <h3 style="text-transform:uppercase; font-weight:900; font-size:20px;">¡Domina el Curso!</h3>
+            <p style="font-size:13px; opacity:0.9; margin-top:5px;">Acceso ilimitado a ejercicios resueltos y PDFs.</p>
+        </div>
+        <div class="sales-body">
+            <div class="chart-box">
+                <p style="font-size:12px; margin-bottom:12px; text-align:center; color:white;">Nivel de Preparación</p>
+                <div class="bar-row">
+                    <span class="bar-label">Gratis</span>
+                    <div class="bar-track">
+                        <div class="bar-val" style="width:20%; background:#9ca3af;"></div>
+                    </div>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-label" style="color:var(--success); font-weight:700;">Premium</span>
+                    <div class="bar-track">
+                        <div class="bar-val"
+                            style="width:95%; background:var(--success); box-shadow:0 0 10px var(--success);"></div>
+                    </div>
+                </div>
+            </div>
+            <p style="text-align:center; font-size:32px; font-weight:800; margin-bottom:25px; color:white;">S/30.00
+                <span style="font-size:12px; font-weight:400; color:#ccc;">/único</span>
+            </p>
+
+            <a href="paywalloficial.html" class="nav-btn" id="sales-unlock-btn"
+                style="background:white; color:black; width:100%; margin-bottom:10px; text-decoration:none; justify-content:center; border-radius:50px;">DESBLOQUEAR
+                TODO</a>
+
+            <button class="btn-verify" id="sales-verify-btn" onclick="toggleVerify()"><i class="fas fa-user-check"></i> ¿Ya tienes cuenta?
+                Verificar</button>
+
+            <div id="sales-logged-hint" style="display:none; text-align:center; margin-bottom:10px; color:var(--success); font-weight:700;"></div>
+
+            <div id="verify-box"
+                style="display:none; margin-top:15px; background:rgba(0,0,0,0.3); padding:15px; border-radius:12px;">
+                <input type="email" id="v-email" placeholder="Tu correo..."
+                    style="width:100%; padding:12px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:white; border-radius:8px; margin-bottom:10px; outline:none;">
+                <button onclick="verifySub()" id="btn-verify-action"
+                    style="width:100%; padding:12px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:700;">Validar
+                    Ahora</button>
+                <div id="v-msg" style="font-size:11px; margin-top:8px; text-align:center; color:#ccc;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="viral-overlay" onclick="closeViral()"></div>
+    <div class="viral-modal" id="viral-modal">
+        <div class="viral-img-top"><i class="fas fa-rocket"></i></div>
+        <div class="viral-body">
+            <h3 style="margin-bottom:10px; font-weight:800; font-size:20px; color:white;">🍀 El Karma del Cachimbo</h3>
+            <p style="font-size:14px; opacity:0.8; margin-bottom:25px; line-height:1.5; color:#ddd;">Estás avanzando
+                rápido. <br><br>¡Dale el dato a un amigo! Ayudar trae buena suerte para el examen.</p>
+            <button class="btn-share-main" onclick="viralShared()"><i class="fab fa-whatsapp"></i> Pasar el dato a un
+                amigo</button>
+            <button class="btn-share-sec" onclick="closeViral()">Me arriesgaré a estudiar solo</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="login-required-overlay" onclick="closeLoginRequired()" style="display:none;"></div>
+    <div class="sales-modal" id="login-required-modal" style="display:none;">
+        <div class="sales-header">
+            <h3 style="text-transform:uppercase; font-weight:900; font-size:20px;">Necesitas iniciar sesión</h3>
+            <p style="font-size:13px; opacity:0.9; margin-top:5px;">Regístrate para guardar favoritos y obtener más funciones premium.</p>
+        </div>
+        <div class="sales-body" style="text-align:center;">
+            <button class="nav-btn" style="width:100%;" onclick="startLogin(); closeLoginRequired();">Iniciar sesión ahora</button>
+            <button class="btn-verify" style="margin-top:10px;" onclick="closeLoginRequired()">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="quiz-modal" id="quiz-modal">
+        <div class="quiz-nav">
+            <span style="font-weight:800; font-size:16px; color:white;"><i class="fas fa-graduation-cap"
+                    style="color:var(--primary)"></i> Examen</span>
+
+            <div style="display:flex; align-items:center;">
+                <button onclick="downloadTopicPDF()" class="btn-topic-pdf">
+                    <i class="fas fa-file-pdf"></i> PDF <i class="fas fa-download" style="font-size:10px;"></i>
+                </button>
+                <button onclick="closeQuiz()"
+                    style="background:rgba(255,255,255,0.1); border:none; color:white; width:36px; height:36px; border-radius:50%; cursor:pointer;"><i
+                        class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="quiz-content" id="quiz-container">
+        </div>
+    </div>
+
+    <div class="premium-toast" id="premium-toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-text">¡Bienvenido Premium! Todo desbloqueado.</span>
+    </div>
+
+
+    <!--<script type="module" src="./js/firebase.js"></script>-->
+
+    <div id="modal-root"></div>
+
+<script type="module" src="./js/main.js"></script>
+
+</body>
+
+</html>

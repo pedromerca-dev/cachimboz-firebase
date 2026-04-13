@@ -1,0 +1,359 @@
+/* ================================
+   VARIABLES (independientes)
+================================ */
+:root {
+    --header-text: #ffffff;
+    --header-border: rgba(255, 255, 255, 0.2);
+    --header-bg: rgba(0, 0, 0, 0.2);
+    --header-hover: rgba(255, 255, 255, 0.2);
+    --primary: #f5115c;
+    --favorite: #ff4081;
+    --radius: 50px;
+}
+
+/* ================================
+   HEADER BASE
+================================ */
+#shared-header {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    background: linear-gradient(180deg,
+            rgba(30, 10, 60, 0.95) 0%,
+            rgba(20, 10, 40, 0.95) 100%);
+
+
+
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+#shared-header.scrolled {
+    background: rgba(10, 5, 25, 0.95);
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* ================================
+   LAYOUT
+================================ */
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px 24px;
+}
+
+.left-nav,
+.right-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ================================
+   LOGO
+================================ */
+.logo {
+    font-weight: 900;
+    font-size: 18px;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ================================
+   BOTONES GENERALES
+================================ */
+
+#shared-header .class-login-btn,
+.class-auth-btn {
+    background: rgba(255, 255, 255, 0.15);
+
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    border-radius: 999px;
+    font-weight: 600;
+    display: inline-flex;
+    flex: none;
+    white-space: nowrap;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: all 0.25s ease;
+    font-size: 14px !important;
+    padding: 8px 18px;
+    height: 40px;
+    flex-shrink: 0;
+
+}
+
+.class-auth-btn.active i {
+    transform: rotate(180deg);
+}
+
+.right-nav {
+    display: flex;
+    gap: 12px;
+}
+
+.class-auth-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+
+
+/* ================================
+   AUTH USER
+================================ */
+.class-auth-user {
+    position: relative;
+}
+
+.class-auth-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: #5b21b6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+/* ================================
+   DROPDOWN
+================================ */
+.class-auth-dropdown {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
+
+    background: rgba(20, 15, 50, 0.98);
+    border: 1px solid var(--header-border);
+    border-radius: 10px;
+
+    width: 180px;
+    overflow: hidden;
+
+    display: none;
+    flex-direction: column;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.class-auth-dropdown.show {
+    display: flex;
+}
+
+.class-auth-item {
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.class-auth-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* ================================
+   BOTONES COURSE
+================================ */
+.back-home-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+
+    transition: background 0.2s;
+}
+
+.back-home-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.menu-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 14px;
+    border-radius: var(--radius);
+
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.ai-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    height: 34px;
+    padding: 0 14px;
+
+    border-radius: var(--radius);
+    border: none;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+}
+
+.favorites-btn {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 50%;
+    border: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255, 64, 129, 0.15);
+    color: var(--favorite);
+
+    cursor: pointer;
+    position: relative;
+}
+
+.fav-count {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+
+    width: 16px;
+    height: 16px;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ================================
+   RESPONSIVE (IMPORTANTE)
+================================ */
+@media (max-width: 768px) {
+    .nav-container {
+        padding: 10px 16px;
+    }
+
+    .menu-toggle span {
+        display: none;
+    }
+
+    .ai-nav-btn span {
+        display: none;
+    }
+}
+
+.nav-container {
+    align-items: center;
+}
+
+.right-nav {
+    display: flex;
+    align-items: center;
+}
+
+#shared-header .class-auth-status {
+    color: #f1f5f9 !important;
+}
+
+#shared-header {
+    font-family: 'Inter', sans-serif;
+    color: white;
+}
+
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    background: #1a0b2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.15),
+            transparent);
+    
+}
+
+
+@media (max-width: 768px) {
+    #shared-header {
+        backdrop-filter: none;
+        background: rgba(20, 10, 40, 0.95);
+    }
+}
+
+
+

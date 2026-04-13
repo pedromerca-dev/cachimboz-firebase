@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "cachimboz-e5284"
+  },
+  "targets": {
+    "cachimboz-e5284": {
+      "hosting": {
+        "app": [
+          "cachimboz-pro"
+        ],
+        "landing": [
+          "cachimboz-landing"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
