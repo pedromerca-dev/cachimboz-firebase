@@ -26,12 +26,7 @@ import {
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCvNlUGP2nLPuOXln7azBBUEA8yaED7X-k",
-    authDomain: "cachimboz-pro.firebaseapp.com",
-    projectId: "cachimboz-pro",
-    storageBucket: "cachimboz-pro.firebasestorage.app",
-    messagingSenderId: "1071545177311",
-    appId: "1:1071545177311:web:078e3a588c63593886456a",
+   //credenciales
 };
 
 export const app = initializeApp(firebaseConfig);

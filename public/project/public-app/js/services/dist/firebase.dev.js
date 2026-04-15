@@ -43,13 +43,7 @@ var _firebaseFirestore = require("https://www.gstatic.com/firebasejs/10.12.2/fir
 
 var _firebaseFunctions = require("https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js");
 
-var firebaseConfig = {
-  apiKey: "AIzaSyCvNlUGP2nLPuOXln7azBBUEA8yaED7X-k",
-  authDomain: "cachimboz-pro.firebaseapp.com",
-  projectId: "cachimboz-pro",
-  storageBucket: "cachimboz-pro.firebasestorage.app",
-  messagingSenderId: "1071545177311",
-  appId: "1:1071545177311:web:078e3a588c63593886456a"
+var firebaseConfig = {//credenciales
 };
 var app = (0, _firebaseApp.initializeApp)(firebaseConfig);
 exports.app = app;

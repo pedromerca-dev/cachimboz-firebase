@@ -1,6 +1,6 @@
 
         import { auth, db, doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "./services/firebase.js";
-        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { CK, Storage } from "./storage.js";
         import { setState } from "./core/store.js";
        import { initHeader } from "./ui/header.js";

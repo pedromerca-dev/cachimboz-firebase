@@ -329,9 +329,8 @@ function renderInitialLoading() {
     </div>
     `;
 }
-
+/*
 let isEditing = false;
-
 export function renderProfile(user) {
     const root = getAppRoot();
     if (!root) return;
@@ -451,10 +450,13 @@ export function renderProfile(user) {
             await showSuccessModal("Perfil actualizado");
 
             isEditing = false;
-            renderProfile(user);
+            const params = new URLSearchParams(window.location.search);
+            if (params.get("view") === "profile") {
+                renderProfile(store.user);
+            }
         };
     }
-}
+}   */
 
 function showLoading() {
     const app = getAppRoot();
@@ -510,6 +512,11 @@ if (document.readyState === "loading") {
     bootAppShell();
 }
 
+export function getRoot() {
+    return document.getElementById("app")
+        || document.getElementById("main-content")
+        || document.body;
+}
 
 
 
