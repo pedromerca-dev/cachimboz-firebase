@@ -1,26 +1,38 @@
+
 import { initHeader, renderHeader } from "./ui/header.js";
-import { store } from "./core/store.js";
 import { setState } from "./core/store.js";
 import { Storage } from "./storage.js";
+import { auth } from "./services/firebase.js";
+import {
+    onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 window.Storage = Storage;
 
-const cachedUser = localStorage.getItem("user");
+await setPersistence(auth, browserLocalPersistence);
 
-if (cachedUser) {
+onAuthStateChanged(auth, async (user) => {
+
+    console.log("origin:", window.location.origin);
+    console.log("AUTH USER:", user);
+
+    if (!user) {
+        console.warn("No autenticado");
+        window.location.href = "index.html";
+        return;
+    }
+
     setState({
-        user: JSON.parse(cachedUser),
+        user,
         authLoaded: true
     });
-}
-initHeader({ variant: "home" });
-renderHeader({ variant: "home" });
 
-const module = await import("./features/profile.js");
-const user = store.user || JSON.parse(localStorage.getItem("user"));
+    initHeader({ variant: "home" });
+    renderHeader({ variant: "home" });
 
-if (user) {
+    const module = await import("./features/profile.js");
     module.renderProfile(user);
-} else {
-    console.warn("No user found");
-}
+
+});
