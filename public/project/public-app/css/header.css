@@ -16,6 +16,7 @@
 ================================ */
 #shared-header {
     width: 100%;
+
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -39,6 +40,13 @@
 /* ================================
    LAYOUT
 ================================ */
+
+/* SOLO para el header compartido */
+#shared-header .nav-container {
+    padding: 10px 16px;
+
+}
+
 .nav-container {
     display: flex;
     align-items: center;
@@ -46,7 +54,10 @@
     gap: 10px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 12px 24px;
+    padding: 0 16px;
+    width: 100%;
+    overflow-x: hidden;
+
 }
 
 .left-nav,
@@ -54,6 +65,9 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 /* ================================
@@ -61,7 +75,7 @@
 ================================ */
 .logo {
     font-weight: 900;
-    font-size: 18px;
+    font-size: 17px;
     color: white;
     text-decoration: none;
     display: flex;
@@ -88,8 +102,8 @@
     gap: 6px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     transition: all 0.25s ease;
-    font-size: 14px !important;
-    padding: 8px 18px;
+    font-size: 13px !important;
+    padding: 6px 14px;
     height: 40px;
     flex-shrink: 0;
 
@@ -101,7 +115,7 @@
 
 .right-nav {
     display: flex;
-    gap: 12px;
+    gap: 8px;
 }
 
 .class-auth-btn:hover {
@@ -213,8 +227,8 @@
     align-items: center;
     gap: 6px;
 
-    height: 34px;
-    padding: 0 14px;
+    height: 32px;
+    padding: 0 12px;
 
     border-radius: var(--radius);
     border: none;
@@ -230,8 +244,8 @@
 }
 
 .favorites-btn {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
 
     border-radius: 50%;
     border: none;
@@ -344,7 +358,7 @@
             transparent,
             rgba(255, 255, 255, 0.15),
             transparent);
-    
+
 }
 
 
@@ -354,6 +368,3 @@
         background: rgba(20, 10, 40, 0.95);
     }
 }
-
-
-
