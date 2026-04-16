@@ -83,11 +83,11 @@ function renderHome() {
 
     app.innerHTML = `
         <div class="max-w-7xl mx-auto p-6 sm:p-8">
-            <div class="space-y-6 sm:space-y-8">
+            <div class="space-y-4 sm:space-y-5">
                 <header class="flex justify-between items-center gap-4">
                     <div class="flex-1">
                         <p class="text-slate-300">¡Hola de nuevo!</p>
-                        <h1 class="text-3xl sm:text-4xl font-extrabold text-white">${userName}</h1>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold text-white">${userName}</h1>
                     </div>
                     <div class="flex items-center gap-2 text-right">
                         <div>
@@ -99,10 +99,10 @@ function renderHome() {
                 </header>
 
                 <section id="continue-section">
-                    <div class="bg-gradient-to-r from-cachimboz-mid to-cachimboz-light p-6 rounded-2xl shadow-xl text-white relative overflow-hidden">
+                    <div class="bg-gradient-to-r from-cachimboz-mid to-cachimboz-light p-3 rounded-2xl shadow-xl text-white relative overflow-hidden">
                         <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/10 rounded-full"></div>
                         <p class="text-sm font-medium opacity-80 uppercase tracking-wider">Continuar Curso</p>
-                        <h2 id="last-course-name" class="text-3xl font-bold mt-2 mb-4">Selecciona un curso</h2>
+                        <h2 id="last-course-name" class="text-xl font-bold mt-1 mb-2">Selecciona un curso</h2>
                         <a id="last-course-link" href="#" class="inline-block mt-4 font-semibold text-sm bg-white text-cachimboz-mid hover:bg-slate-100 px-5 py-2.5 rounded-lg transition-colors shadow">
                             Ir a la lección →
                         </a>
@@ -111,7 +111,7 @@ function renderHome() {
 
                 <section>
                     <h3 class="text-xl font-bold text-white mb-4">Cursos completos</h3>
-                    <div id="courses-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+                    <div id="courses-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
                         ${renderCourses()}
                     </div>
                 </section>
