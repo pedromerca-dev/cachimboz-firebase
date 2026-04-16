@@ -13,6 +13,8 @@ import {
 export function initHeader({ variant = "home" } = {}) {
     let lastUserId = null;
 
+    renderHeader({ variant });
+
     subscribe(() => {
         const currentUserId = store.user?.uid || null;
 
