@@ -7,17 +7,27 @@
 
     <!-- mismo stack que index -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./css/tailwind.css">
     <link rel="stylesheet" href="./css/header.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    </head>
+<style>
+    .home-bg {
+        background-image: linear-gradient(180deg, #3e088f 0%, #581c87 100%);
+    }
+</style>
 
-<body class="bg-gradient-to-b from-purple-900 to-purple-800 min-h-screen">
+</head>
 
-    <header id="shared-header" class="header"></header>
 
-    <div id="app"></div>
+<body class="font-inter text-slate-100 min-h-screen home-bg">
+
+    <div id="root">
+        <header id="shared-header"></header>
+        <div id="app"></div>
+    </div>
+    
     <div id="modal-root"></div>
+    <div id="toast-root"></div>
 
     <script type="module" src="./js/profilePage.js"></script>
 

@@ -1,7 +1,7 @@
 import { store } from "../core/store.js";
 import { showSuccessModal } from "../ui/modal.js";
 // import {getAppRoot} from "../app.js";
-import { doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { db } from "../services/firebase.js";
 
 
@@ -120,7 +120,7 @@ export function renderProfile(user) {
             await updateDoc(doc(db, "users", user.uid), {
                 university: universityEl.value,
                 area: areaEl.value
-            });
+            }, { merge: true });
 
             // sync local
             user.university = universityEl.value;
