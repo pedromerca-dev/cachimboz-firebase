@@ -22,11 +22,13 @@ export const Storage = {
     saveFormData(data) {
         localStorage.setItem('formData', JSON.stringify(data));
     },
-    getStreak() {
-        return Number(localStorage.getItem('streak')) || 0;
+    getStreak(userId) {
+        if (!userId) return 0;
+        return Number(localStorage.getItem(`streak_${userId}`)) || 0;
     },
-    setStreak(value) {
-        localStorage.setItem('streak', value);
+    setStreak(userId,value) {
+        if (!userId) return;
+        localStorage.setItem(`streak_${userId}`, value);
     },
     saveLastCourse(name, link) {
         localStorage.setItem(

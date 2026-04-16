@@ -14,9 +14,12 @@ export function initHeader({ variant = "home" } = {}) {
     let lastUserId = null;
 
     subscribe(() => {
-      
+        const currentUserId = store.user?.uid || null;
+
+        if (currentUserId !== lastUserId) {
+            lastUserId = currentUserId;
             renderHeader({ variant });
-        
+        }
     });
 }
 function getCourseTitle() {
