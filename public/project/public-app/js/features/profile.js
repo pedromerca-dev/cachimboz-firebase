@@ -1,14 +1,17 @@
 import { store } from "../core/store.js";
 import { showSuccessModal } from "../ui/modal.js";
-import {getAppRoot} from "../app.js";
+// import {getAppRoot} from "../app.js";
 import { doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { db } from "../services/firebase.js";
+
 
 
 let isEditing = false;
 
 export function renderProfile(user) {
-    const root = getAppRoot();
+    const root =
+        document.getElementById("profile-view") ||
+        document.getElementById("app");
     if (!root) return;
 
     const university = user?.university || "UNSAAC";
