@@ -146,7 +146,10 @@ function renderError() {
 }
 
 function calculateStreak() {
-    return Storage.getStreak();
+    const user = store.user;
+    if (!user) return 0;
+
+    return Storage.getStreak(user.uid);
 }
 
 function saveLastCourse(name, link) {
@@ -283,9 +286,8 @@ onAuthStateChanged(auth, async (user) => {
     setState({ authChecking: false });
 
     if (!user) {
+        localStorage.removeItem("user");
         setState({ user: null, authLoaded: true });
-        
-      
         initApp();
         return;
     }
@@ -293,10 +295,12 @@ onAuthStateChanged(auth, async (user) => {
     await saveUserIfNew(user);
     const enrichedUser = await loadUserProfile(user);
     localStorage.setItem("user", JSON.stringify(enrichedUser));
+    if (!localStorage.getItem(`streak_${user.uid}`)) {
+        localStorage.setItem(`streak_${user.uid}`, "1");
+    }
 
     setState({ user: enrichedUser, authLoaded: true });
-   
-
+    
 
     if (authInitPending) {
         authInitPending = false;
@@ -304,7 +308,6 @@ onAuthStateChanged(auth, async (user) => {
         return;
     }
 
-    // Si ya cargó al menos una vez, solo reacciona al cambio de sesión
     await checkOnboarding(user);
 });
 
