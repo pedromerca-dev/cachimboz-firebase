@@ -4,17 +4,9 @@
         import { CK, Storage } from "./storage.js";
         import { setState } from "./core/store.js";
        import { initHeader } from "./ui/header.js";
-
-let currentUser = null;
-const overlay = document.getElementById('sidebar-overlay');
-
-const observer = new MutationObserver(() => {
-    console.log('🚨 overlay cambió:', overlay.className);
-    console.trace(); // 🔥 te dice QUIÉN lo activó
-});
-
-observer.observe(overlay, { attributes: true });
-
+       
+       
+       let currentUser = null;
 
         const CACHE_VERSION = "v2";
 
@@ -369,7 +361,13 @@ allowfullscreen>
                 overlay.classList.add('show');
             }
 
+            if (!sidebar.dataset.loaded) {
+                renderSidebar();
+                sidebar.dataset.loaded = "true";
+            }
         }
+    
+        
         window.toggleSidebar = toggleSidebar;
         function openFavorites() { switchTab('favoritos'); toggleSidebar(); }
         window.openFavorites = openFavorites;
