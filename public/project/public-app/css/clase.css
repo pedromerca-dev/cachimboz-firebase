@@ -178,10 +178,21 @@ body {
 /* SIDEBAR */
 .sidebar {
     position: fixed;
-    inset: 0 auto 0 0;
-    width: min(85%, 320px);
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 85%;
+    max-width: 320px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
     transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
 }
+
 
 .sidebar.open {
     transform: translateX(0);
@@ -561,17 +572,27 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(15, 5, 28, 0.9);
-    z-index: 999;
+    background: rgba(15, 5, 28, 0.6);
+    z-index: 950;
+
     opacity: 0;
     pointer-events: none;
+
     transition: opacity 0.3s;
-    backdrop-filter: blur(5px);
+
+    backdrop-filter: none;
 }
 
 .overlay.show {
     opacity: 1;
     pointer-events: all;
+    backdrop-filter: blur(5px);
+}
+
+
+.sidebar:not(.open)~#sidebar-overlay {
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
 .viral-modal {
@@ -671,6 +692,8 @@ body {
         opacity: 1;
     }
 }
+
+
 
 .sales-header {
     background: var(--gradient-btn);

@@ -6,6 +6,14 @@
        import { initHeader } from "./ui/header.js";
 
 let currentUser = null;
+const overlay = document.getElementById('sidebar-overlay');
+
+const observer = new MutationObserver(() => {
+    console.log('🚨 overlay cambió:', overlay.className);
+    console.trace(); // 🔥 te dice QUIÉN lo activó
+});
+
+observer.observe(overlay, { attributes: true });
 
 
         const CACHE_VERSION = "v2";
@@ -347,15 +355,18 @@ allowfullscreen>
         function toggleSidebar() {
 
             const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
 
-            const willOpen = !sidebar.classList.contains("open");
+            if (!sidebar || !overlay) return;
 
-            sidebar.classList.toggle('open');
-            document.getElementById('sidebar-overlay').classList.toggle('show');
+            const isOpen = sidebar.classList.contains("open");
 
-            if (willOpen && !sidebar.dataset.loaded) {
-                renderSidebar();
-                sidebar.dataset.loaded = "true";
+            if (isOpen) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            } else {
+                sidebar.classList.add('open');
+                overlay.classList.add('show');
             }
 
         }
@@ -578,7 +589,11 @@ allowfullscreen>
 
 
         window.openPDF = openPDF;
-        function openSales() { updateSalesModalAuth(currentUser); document.getElementById('sales-overlay').classList.add('show'); document.getElementById('sales-modal').classList.add('show'); }
+        function openSales() {
+            
+             updateSalesModalAuth(currentUser); 
+             document.getElementById('sales-overlay').classList.add('show'); 
+             document.getElementById('sales-modal').classList.add('show'); }
         function closeSales() { document.getElementById('sales-overlay').classList.remove('show'); document.getElementById('sales-modal').classList.remove('show'); }
 
         function showLoginRequired() {
