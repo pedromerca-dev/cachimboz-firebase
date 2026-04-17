@@ -6,16 +6,7 @@
        import { initHeader } from "./ui/header.js";
 
 let currentUser = null;
-const cachedUser = localStorage.getItem("user");
 
-if (cachedUser) {
-    currentUser = JSON.parse(cachedUser);
-
-    setState({
-        user: currentUser,
-        authLoaded: true
-    });
-}
 
         const CACHE_VERSION = "v2";
 
@@ -82,9 +73,15 @@ if (cachedUser) {
 
         function loadStorage() {
             const courseId = COURSE_ID;
-            const uid = currentUser?.uid;
+            const uid = currentUser?.uid || null;
             app.completed = Storage.getCompleted(courseId, uid);
-            app.favorites = Storage.getFavorites(courseId, uid);
+            if (!uid) {
+                app.completed = new Set();
+                app.currentIdx = 0;
+            }
+            app.favorites = uid
+                ? Storage.getFavorites(courseId, uid)
+                : new Set();       
             app.currentIdx = Storage.getLastIndex(courseId, uid);
             app.quizUsed = Storage.getQuizUsage(courseId, uid);
             app.clicks = Storage.getCourseClicks(courseId, uid);
@@ -153,14 +150,29 @@ if (cachedUser) {
             const thumb = `https://i.ytimg.com/vi/${lesson.youtube_id}/hqdefault.jpg`;
 
             app.currentIdx = idx;
-            Storage.setLastIndex(idx, COURSE_ID);
+            Storage.setLastIndex(idx, COURSE_ID, currentUser?.uid);
 
             if (!app.completed.has(idx)) {
                 app.completed.add(idx);
-                Storage.saveCompleted(app.completed, COURSE_ID);
+                Storage.saveCompleted(app.completed, COURSE_ID, currentUser?.uid);
             }
 
-            await updateStudyStreak();
+            if (currentUser) {
+                try {
+                    await updateDoc(doc(db, 'users', currentUser.uid), {
+                        [`progress.${COURSE_ID}`]: {
+                            completed: Array.from(app.completed),
+                            currentIdx: app.currentIdx
+                        }
+                    });
+                } catch (err) {
+                    console.error('Error guardando progreso:', err);
+                }
+            }
+
+            if (countClick) {
+                await updateStudyStreak();
+            }
 
             container.innerHTML = `
 <div id="video-thumb" style="position:relative;width:100%;height:100%;cursor:pointer">
@@ -199,7 +211,7 @@ allowfullscreen>
 
             if (countClick) {
                 app.clicks++;
-                Storage.setCourseClicks(app.clicks, COURSE_ID);
+                Storage.setCourseClicks(app.clicks, COURSE_ID, currentUser?.uid);
 
                 if (app.clicks % 5 === 0) {
                     setTimeout(openViral, 5000);
@@ -796,6 +808,17 @@ allowfullscreen>
                         const userSnap = await getDoc(doc(db, 'users', user.uid));
                         const data = userSnap.data();
 
+                        const progress = data?.progress?.[COURSE_ID];
+
+                        if (progress) {
+                            app.completed = new Set(progress.completed || []);
+                            app.currentIdx = progress.currentIdx || 0;
+
+                            // sincronizar también en localStorage
+                            Storage.saveCompleted(app.completed, COURSE_ID, user.uid);
+                            Storage.setLastIndex(app.currentIdx, COURSE_ID, user.uid);
+                        }
+
                         const { loaded: loadedFavorites, canonical: canonicalFavorites } = normalizeFavorites(data?.favorites);
 
                         if (loadedFavorites.size > 0) {
@@ -809,7 +832,6 @@ allowfullscreen>
                             setState({ user: { ...user, isPremium: data.isPremium } });
                         }
 
-                        // Save canonical favorites en Firestore si había formato legacy / desordenado
                         if (data?.favorites && Array.isArray(data.favorites)) {
                             const sourceSet = new Set(data.favorites.map(v => String(v)));
                             const canonicalAsArray = Array.from(canonicalFavorites);
@@ -820,10 +842,19 @@ allowfullscreen>
                                 });
                             }
                         }
+
+                        updateUIState();
                     } catch (err) {
                         console.error('Error cargando favoritos:', err);
                         app.favorites = Storage.getFavorites(COURSE_ID, user.uid);
                     }
+                }
+
+                if (!user) {
+                    app.favorites = new Set();
+                    app.completed = new Set();
+                    updateUIState();
+                    return;
                 }
 
                 updateUIState();
@@ -835,11 +866,19 @@ allowfullscreen>
                 await signOut(auth);
                 localStorage.removeItem("user");
                 localStorage.removeItem("streak_date");
+                Object.keys(localStorage).forEach(k => {
+                    if (k.includes("cachimboz_") || k.includes("streak_")) {
+                        localStorage.removeItem(k);
+                    }
+                });
                 Storage.clearAll?.(); 
                 location.reload();
                 localStorage.removeItem("streak_date");3
                 Storage.resetStreak?.();
                 currentUser = null;
+                app.favorites = new Set();
+                app.completed = new Set();
+                location.reload();
 
                 showToast('Sesión cerrada');
             } catch (err) {
@@ -1036,15 +1075,19 @@ allowfullscreen>
         }
 
         async function updateStudyStreak() {
+
+            if (!currentUser) {             
+                return;
+            }
+
             if (!authChecked) {
-                // auth aún no inicializado: no hacemos nada.
                 return;
             }
 
             const today = new Date().toDateString();
 
             const last = localStorage.getItem("streak_date");
-            let streak = Storage.getStreak();
+            let streak = Storage.getStreak(currentUser?.uid);
 
             if (!last) {
                 streak = 1;
@@ -1067,7 +1110,7 @@ allowfullscreen>
             }
 
             localStorage.setItem("streak_date", today);
-            Storage.setStreak(streak);
+            Storage.setStreak(currentUser?.uid, streak);
 
             // Guardar racha en Firestore para usuario logueado.
             if (currentUser) {
