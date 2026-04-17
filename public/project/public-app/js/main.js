@@ -4,9 +4,9 @@
         import { CK, Storage } from "./storage.js";
         import { setState } from "./core/store.js";
        import { initHeader } from "./ui/header.js";
-
-let currentUser = null;
-
+       
+       
+       let currentUser = null;
 
         const CACHE_VERSION = "v2";
 
@@ -347,18 +347,27 @@ allowfullscreen>
         function toggleSidebar() {
 
             const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
 
-            const willOpen = !sidebar.classList.contains("open");
+            if (!sidebar || !overlay) return;
 
-            sidebar.classList.toggle('open');
-            document.getElementById('sidebar-overlay').classList.toggle('show');
+            const isOpen = sidebar.classList.contains("open");
 
-            if (willOpen && !sidebar.dataset.loaded) {
+            if (isOpen) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            } else {
+                sidebar.classList.add('open');
+                overlay.classList.add('show');
+            }
+
+            if (!sidebar.dataset.loaded) {
                 renderSidebar();
                 sidebar.dataset.loaded = "true";
             }
-
         }
+    
+        
         window.toggleSidebar = toggleSidebar;
         function openFavorites() { switchTab('favoritos'); toggleSidebar(); }
         window.openFavorites = openFavorites;
@@ -578,7 +587,11 @@ allowfullscreen>
 
 
         window.openPDF = openPDF;
-        function openSales() { updateSalesModalAuth(currentUser); document.getElementById('sales-overlay').classList.add('show'); document.getElementById('sales-modal').classList.add('show'); }
+        function openSales() {
+            
+             updateSalesModalAuth(currentUser); 
+             document.getElementById('sales-overlay').classList.add('show'); 
+             document.getElementById('sales-modal').classList.add('show'); }
         function closeSales() { document.getElementById('sales-overlay').classList.remove('show'); document.getElementById('sales-modal').classList.remove('show'); }
 
         function showLoginRequired() {
