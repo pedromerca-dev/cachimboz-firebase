@@ -158,19 +158,6 @@ function saveLastCourse(name, link) {
 
 const provider = new GoogleAuthProvider();
 
-async function loginWithGoogle() {
-    showLoading();
-
-    const result = await signInWithPopup(auth, provider);
-
-    const user = result.user;
-
-    await saveUserIfNew(user);
-
-    checkOnboarding(user);
-
-}
-
 
 async function saveUserIfNew(user){
 
@@ -186,6 +173,7 @@ async function saveUserIfNew(user){
             university: null,
             area: null,
             favorites: [],
+            onboardingCompleted: false,
             isPremium: false,
             created_at: new Date()
         });
@@ -221,7 +209,7 @@ async function checkOnboarding(user) {
 
     const data = snap.data();
 
-    if (!data.university || !data.area) {
+    if (!data.onboardingCompleted) {
 
         renderOnboarding(user);
 
@@ -236,41 +224,100 @@ async function checkOnboarding(user) {
 function renderOnboarding(user) {
     const app = getAppRoot();
     if (!app) return;
-
     app.innerHTML = `
-        <div class="flex flex-col items-center justify-center min-h-screen gap-4">
-            
-            <h2 class="text-xl font-bold text-white">Configura tu perfil</h2>
+    
+    <!-- OVERLAY -->
+    <div style="
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(10, 5, 30, 0.7);
+        backdrop-filter: blur(6px);
+        z-index: 9999;
+    ">
 
-            <select id="university" class="p-2 rounded">
-                <option value="">Selecciona universidad</option>
-                <option value="UNSAAC">UNSAAC</option>
-                <option value="UNSA">UNSA</option>
-            </select>
+        <!-- CARD -->
+        <div style="
+            width: 100%;
+            max-width: 420px;
+            background: #2d1b4e;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        ">
 
-            <select id="area" class="p-2 rounded">
-                <option value="">Selecciona área</option>
-                <option value="ingenieria">Ingeniería</option>
-                <option value="biomedicas">Biomédicas</option>
-            </select>
+            <h2 style="
+                text-align: center;
+                color: white;
+                margin-bottom: 20px;
+                font-size: 20px;
+                font-weight: bold;
+            ">
+                Configura tu perfil
+            </h2>
 
-            <button id="save-onboarding"
-                class="bg-purple-600 text-white px-6 py-2 rounded">
-                Continuar
-            </button>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+
+                <select id="university" style="
+                    padding:10px;
+                    border-radius:8px;
+                    background:#1a0b2e;
+                    color:white;
+                    border:1px solid rgba(255,255,255,0.1);
+                ">
+                   <option value="" disabled selected hidden>Selecciona universidad</option>
+                   <option value="UNSAAC">UNSAAC</option>
+                   <option value="UNSA">UNSA</option>
+                   <option value="otros">Otros</option>
+                </select>
+
+                <select id="area" style="
+                    padding:10px;
+                    border-radius:8px;
+                    background:#1a0b2e;
+                    color:white;
+                    border:1px solid rgba(255,255,255,0.1);
+                ">
+                    <option value="" disabled selected hidden>Selecciona área</option>
+                    <option value="ingenieria">Ingeniería</option>
+                     <option value="biomedicas">Biomédicas</option>
+                     <option value="otros">Otros</option>
+                </select>
+
+                <button id="save-onboarding" style="
+                    margin-top:10px;
+                    padding:10px;
+                    border:none;
+                    border-radius:8px;
+                    background:#7c3aed;
+                    color:white;
+                    font-weight:bold;
+                    cursor:pointer;
+                ">
+                    Continuar
+                </button>
+
+            </div>
 
         </div>
+    </div>
     `;
 
+
     document.getElementById("save-onboarding").onclick = async () => {
-        showLoading();
+      
 
         const university = document.getElementById("university").value;
         const area = document.getElementById("area").value;
 
+        showLoading();
+
         await updateDoc(doc(db, "users", user.uid), {
             university,
-            area
+            area,
+            onboardingCompleted: true
         });
 
         initApp();

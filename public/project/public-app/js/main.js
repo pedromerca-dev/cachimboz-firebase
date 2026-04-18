@@ -782,6 +782,24 @@ allowfullscreen>
             initHeader({ variant: "course" });
 
             onAuthStateChanged(auth, async (user) => {
+
+                if (user) {
+                    try {
+                        const snap = await getDoc(doc(db, "users", user.uid));
+                        const data = snap.data();
+
+                    
+                        if (!data || !data.onboardingCompleted) {
+                            window.location.href = "index.html";
+                            return;
+                        }
+
+                    } catch (err) {
+                        console.error("Error verificando onboarding:", err);
+                        window.location.href = "index.html";
+                        return;
+                    }
+                }
                 currentUser = user;
                 authChecked = true;
                 isAuthenticated = !!user;
