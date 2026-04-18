@@ -524,9 +524,6 @@ allowfullscreen>
             const lesson = app.flatList[app.currentIdx];
             const topic = app.data[lesson.tIdx];
 
-            console.log("topic:", topic);
-            console.log("pdf_resuelto:", topic?.pdf_resuelto);
-
             if (topic && topic.pdf_resuelto && topic.pdf_resuelto.trim() !== "") {
                 window.open(topic.pdf_resuelto, '_blank');
             } else {
