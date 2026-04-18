@@ -121,7 +121,7 @@
         function handleVideoClick(idx) {
             const targetVid = app.flatList[idx];
             if (!targetVid) return;
-            if (targetVid.tIdx >= 2 && !Storage.hasAccess()) {
+           if (targetVid.tIdx >= 2 && !(currentUser && Storage.hasAccess())) {
                 if (window.innerWidth < 768 && document.getElementById('sidebar').classList.contains('open')) {
                     toggleSidebar();
                 }
@@ -234,7 +234,7 @@ allowfullscreen>
         window.viralShared = viralShared;
         function updateUIState() {
             const isFav = app.favorites.has(app.currentIdx);
-            const isPremium = Storage.hasAccess();
+            const isPremium = currentUser && Storage.hasAccess();
 
             const btn = document.getElementById('current-fav-btn');
             if (btn) {
@@ -385,8 +385,8 @@ allowfullscreen>
         function handleTutorClick() {
             const lesson = app.flatList[app.currentIdx];
 
-            if (Storage.hasAccess()) {
-
+            if (currentUser && Storage.hasAccess()) {
+           
                 showToast(`🤖 Pregúntale al Tutor AI sobre "${lesson.tema}" (próximamente)`);
 
             } else {
@@ -396,7 +396,9 @@ allowfullscreen>
             }
         }
         window.handleTutorClick = handleTutorClick;
-        function attemptStartQuiz() { if (Storage.hasAccess()) { startQuiz('premium'); } else { if (app.quizUsed[app.currentIdx]) { openSales(); } else { startQuiz('free_trial'); } } }
+        function attemptStartQuiz() { 
+            if (currentUser && Storage.hasAccess()) 
+                 { startQuiz('premium'); } else { if (app.quizUsed[app.currentIdx]) { openSales(); } else { startQuiz('free_trial'); } } }
         window.attemptStartQuiz = attemptStartQuiz;
         function startQuiz(mode) {
             const lesson = app.flatList[app.currentIdx];
@@ -515,12 +517,15 @@ allowfullscreen>
         }
 
         function downloadTopicPDF() {
-            if (!Storage.hasAccess()) {
-                openSales();
-                return;
-            }
+         //   if (!(currentUser && Storage.hasAccess())) {
+        //        openSales();
+        //        return;
+       //     }
             const lesson = app.flatList[app.currentIdx];
             const topic = app.data[lesson.tIdx];
+
+            console.log("topic:", topic);
+            console.log("pdf_resuelto:", topic?.pdf_resuelto);
 
             if (topic && topic.pdf_resuelto && topic.pdf_resuelto.trim() !== "") {
                 window.open(topic.pdf_resuelto, '_blank');
@@ -536,9 +541,7 @@ allowfullscreen>
             const premium = Storage.getPremiumGlobal();
             const course = Storage.getCourseAccess();
 
-            const token = premium?.token || course?.token;
-
-            if (!token) {
+            if (!(currentUser && (premium?.token || course?.token))) {
                 openSales();
                 return;
             }
@@ -787,7 +790,59 @@ allowfullscreen>
                     try {
                         const snap = await getDoc(doc(db, "users", user.uid));
                         const data = snap.data();
+                        try {
+                            const email = user.email.toLowerCase();
 
+                            if (!Storage.hasAccess() || !data?.isPremium){
+
+                                const result = await fetch(
+                                    "https://us-central1-cachimboz-pro.cloudfunctions.net/verifyEmail",
+                                    {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({
+                                            email,
+                                            course: COURSE_ID
+                                        })
+                                    }
+                                );
+
+                                const verifyData = await result.json();
+                                const access = !!verifyData.access;
+
+                                if (!access) {
+                                    localStorage.removeItem("premium_token");
+                                    localStorage.removeItem("course_token");
+                                } else {
+                                    if (verifyData.plan?.includes("PRO_PLAN")) {
+                                        Storage.setPremiumGlobal({
+                                            email,
+                                            plan: verifyData.plan,
+                                            start: verifyData.start || "",
+                                            vencimiento: verifyData.end || "",
+                                            token: verifyData.token
+                                        });
+
+                                        await updateDoc(doc(db, 'users', user.uid), {
+                                            isPremium: true
+                                        });
+
+                                    } else {
+                                        Storage.setCourseAccess({
+                                            email,
+                                            vencimiento: verifyData.end || "",
+                                            token: verifyData.token
+                                        });
+
+                                        await updateDoc(doc(db, 'users', user.uid), {
+                                            isPremium: false
+                                        });
+                                    }
+                                }
+                            }
+                        } catch (err) {
+                            console.error("Auto verify error:", err);
+                        }
                     
                         if (!data || !data.onboardingCompleted) {
                             window.location.href = "index.html";
@@ -882,6 +937,8 @@ allowfullscreen>
                 }
 
                 if (!user) {
+                    localStorage.removeItem("premium_token");
+                    localStorage.removeItem("course_token");
                     app.favorites = new Set();
                     app.completed = new Set();
                     updateUIState();
@@ -897,14 +954,16 @@ allowfullscreen>
                 await signOut(auth);
                 localStorage.removeItem("user");
                 localStorage.removeItem("streak_date");
+                localStorage.removeItem("premium_token");
+                localStorage.removeItem("course_token");
+
                 Object.keys(localStorage).forEach(k => {
                     if (k.includes("cachimboz_") || k.includes("streak_")) {
                         localStorage.removeItem(k);
                     }
                 });
                 Storage.clearAll?.(); 
-                location.reload();
-                localStorage.removeItem("streak_date");3
+                localStorage.removeItem("streak_date");
                 Storage.resetStreak?.();
                 currentUser = null;
                 app.favorites = new Set();
