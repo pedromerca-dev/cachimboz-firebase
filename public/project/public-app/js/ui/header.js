@@ -108,7 +108,7 @@ export function renderHeader({ variant = "home" } = {}) {
         authHtml = `<button class="class-login-btn" onclick="startLogin()"><i class="fas fa-user"></i> Iniciar sesión</button>`;
     } else {
         const first = user.displayName ? user.displayName.split(" ")[0] : "Usuario";
-        const isPremium = window.Storage?.hasAccess();
+        const isPremium = store.user && window.Storage?.hasAccess();
         const premiumLabel = isPremium ? "✔ Premium" : "❌ Sin premium";
 
         authHtml = `
