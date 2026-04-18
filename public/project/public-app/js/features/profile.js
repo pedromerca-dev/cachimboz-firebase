@@ -24,13 +24,15 @@ export function renderProfile(user) {
 
             <div class="grid gap-3 sm:grid-cols-2">
                 <select id="university" class="p-2 rounded bg-black/30 border border-white/10">
-                    <option value="UNSAAC" ${university === "UNSAAC" ? "selected" : ""}>UNSAAC</option>
-                    <option value="UNSA" ${university === "UNSA" ? "selected" : ""}>UNSA</option>
+                   <option value="UNSAAC" ${university === "UNSAAC" ? "selected" : ""}>UNSAAC</option>
+                   <option value="UNSA" ${university === "UNSA" ? "selected" : ""}>UNSA</option>
+                    <option value="otros" ${university === "otros" ? "selected" : ""}>Otros</option>
                 </select>
 
                 <select id="area" class="p-2 rounded bg-black/30 border border-white/10">
-                    <option value="ingenieria" ${area === "ingenieria" ? "selected" : ""}>Ingeniería</option>
-                    <option value="biomedicas" ${area === "biomedicas" ? "selected" : ""}>Biomédicas</option>
+                   <option value="ingenieria" ${area === "ingenieria" ? "selected" : ""}>Ingeniería</option>
+                   <option value="biomedicas" ${area === "biomedicas" ? "selected" : ""}>Biomédicas</option>
+                    <option value="otros" ${area === "otros" ? "selected" : ""}>Otros</option>
                 </select>
             </div>
         </div>

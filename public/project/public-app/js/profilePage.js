@@ -8,6 +8,9 @@ import {
     setPersistence,
     browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { db } from "./services/firebase.js";
+
 
 window.Storage = Storage;
 
@@ -15,14 +18,20 @@ await setPersistence(auth, browserLocalPersistence);
 
 onAuthStateChanged(auth, async (user) => {
 
-    console.log("origin:", window.location.origin);
-    console.log("AUTH USER:", user);
 
     if (!user) {
         console.warn("No autenticado");
         window.location.href = "index.html";
         return;
     }
+
+    const ref = doc(db, "users", user.uid);
+    const snap = await getDoc(ref);
+    const data = snap.data();
+    const fullUser = {
+        ...user,
+        ...data
+    };
 
     setState({
         user,
@@ -33,6 +42,6 @@ onAuthStateChanged(auth, async (user) => {
     renderHeader({ variant: "home" });
 
     const module = await import("./features/profile.js");
-    module.renderProfile(user);
+    module.renderProfile(fullUser);
 
 });
