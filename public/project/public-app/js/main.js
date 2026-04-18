@@ -1113,9 +1113,6 @@ allowfullscreen>
 
         function updateActiveLesson() {
 
-            console.log("USER:", currentUser);
-            console.log("HAS ACCESS:", Storage.hasAccess());
-            console.log("IS PREMIUM FINAL:", currentUser && Storage.hasAccess());
             document.querySelectorAll('.lesson-item')
                 .forEach(el => el.classList.remove('active'));
 
