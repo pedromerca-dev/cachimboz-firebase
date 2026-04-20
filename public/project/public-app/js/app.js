@@ -233,10 +233,25 @@ function renderOnboarding(user) {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(10, 5, 30, 0.7);
-        backdrop-filter: blur(6px);
+     background: linear-gradient(
+    to bottom,
+    rgba(10,5,30,0.4) 0px,
+    rgba(10,5,30,0.6) 61px,
+    rgba(20,10,40,0.95) 10px,
+    rgba(45,27,78,0.95) 50%,
+    rgba(76,29,149,0.95) 100%
+);
+backdrop-filter: blur(6px);
         z-index: 9999;
     ">
+
+    <div style="
+        position:absolute;
+        inset:0;
+        background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+        opacity: 0.2;
+        pointer-events:none;
+    "></div>
 
         <!-- CARD -->
         <div style="
@@ -312,7 +327,7 @@ function renderOnboarding(user) {
         const university = document.getElementById("university").value;
         const area = document.getElementById("area").value;
 
-        showLoading();
+        renderInitialLoading();
 
         await updateDoc(doc(db, "users", user.uid), {
             university,
@@ -379,164 +394,6 @@ function renderInitialLoading() {
     </div>
     `;
 }
-/*
-let isEditing = false;
-export function renderProfile(user) {
-    const root = getAppRoot();
-    if (!root) return;
-
-    const university = user?.university || "UNSAAC";
-    const area = user?.area || "ingenieria";
-
-    const profileContent = isEditing
-        ? `
-        <div class="rounded-xl border border-white/10 p-4 sm:p-5 bg-black/20 mb-4">
-            <h3 class="text-white/80 font-semibold mb-3">Editar perfil</h3>
-
-            <div class="grid gap-3 sm:grid-cols-2">
-                <select id="university" class="p-2 rounded bg-black/30 border border-white/10">
-                    <option value="UNSAAC" ${university === "UNSAAC" ? "selected" : ""}>UNSAAC</option>
-                    <option value="UNSA" ${university === "UNSA" ? "selected" : ""}>UNSA</option>
-                </select>
-
-                <select id="area" class="p-2 rounded bg-black/30 border border-white/10">
-                    <option value="ingenieria" ${area === "ingenieria" ? "selected" : ""}>Ingeniería</option>
-                    <option value="biomedicas" ${area === "biomedicas" ? "selected" : ""}>Biomédicas</option>
-                </select>
-            </div>
-        </div>
-        `
-        : `
-        <div class="rounded-xl border border-white/10 p-4 sm:p-5 bg-black/20 mb-4">
-            <h3 class="text-white/80 font-semibold mb-3">Info personal</h3>
-
-            <div class="grid gap-2 text-sm sm:grid-cols-2">
-                <div>
-                    <span class="text-white/70">Universidad:</span><br>
-                    <strong>${university}</strong>
-                </div>
-                <div>
-                    <span class="text-white/70">Área:</span><br>
-                    <strong>${area}</strong>
-                </div>
-            </div>
-        </div>
-        `;
-
-    const actionButtons = isEditing
-        ? `
-        <div class="flex flex-col sm:flex-row gap-3 mt-6">
-            <button id="save-btn" class="flex-1 sm:flex-none sm:px-6 bg-purple-600 hover:bg-purple-700 py-2 rounded-lg font-bold transition">
-                Guardar cambios
-            </button>
-            <button id="cancel-btn" class="flex-1 sm:flex-none sm:px-6 bg-white/10 hover:bg-white/20 py-2 rounded-lg transition">
-                Cancelar
-            </button>
-        </div>
-        `
-        : `
-        <button id="edit-btn" class="w-full sm:w-auto sm:px-6 bg-purple-600 hover:bg-purple-700 py-2 rounded-lg font-bold mt-4 transition">
-            Editar perfil
-        </button>
-        `;
-
-    root.innerHTML = `
-        <div class="max-w-2xl lg:max-w-3xl mx-auto px-4 sm:px-6 py-6 text-white">
-            <section class="rounded-xl border border-white/10 bg-white/10 p-4 sm:p-6 lg:p-8 shadow-xl">
-                
-                <div class="flex items-center gap-4 mb-6">
-                    ${user?.photoURL
-            ? `<img src="${user.photoURL}" class="w-14 h-14 rounded-full object-cover border border-white/20"/>`
-            : `<div class="w-14 h-14 rounded-full bg-purple-600 flex items-center justify-center text-lg font-bold">${(user?.displayName || "U")[0]}</div>`
-        }
-
-                    <div>
-                        <h2 class="text-lg font-bold">${user?.displayName || "Usuario"}</h2>
-                        <p class="text-xs text-white/60">${user?.email || ""}</p>
-                    </div>
-                </div>
-
-                ${profileContent}
-                ${actionButtons}
-
-            </section>
-        </div>
-    `;
-
-    // 👉 eventos
-
-    const editBtn = document.getElementById("edit-btn");
-    const saveBtn = document.getElementById("save-btn");
-    const cancelBtn = document.getElementById("cancel-btn");
-
-    if (editBtn) {
-        editBtn.onclick = () => {
-            isEditing = true;
-            renderProfile(user);
-        };
-    }
-
-    if (cancelBtn) {
-        cancelBtn.onclick = () => {
-            isEditing = false;
-            renderProfile(user);
-        };
-    }
-
-    if (saveBtn) {
-        saveBtn.onclick = async () => {
-            const universityEl = document.getElementById("university");
-            const areaEl = document.getElementById("area");
-
-            await updateDoc(doc(db, "users", user.uid), {
-                university: universityEl.value,
-                area: areaEl.value
-            });
-
-            // sync local
-            user.university = universityEl.value;
-            user.area = areaEl.value;
-
-            await showSuccessModal("Perfil actualizado");
-
-            isEditing = false;
-            const params = new URLSearchParams(window.location.search);
-            if (params.get("view") === "profile") {
-                renderProfile(store.user);
-            }
-        };
-    }
-}   */
-
-function showLoading() {
-    const app = getAppRoot();
-    if (!app) return;
-
-    app.innerHTML = `
-        <div class="max-w-7xl mx-auto px-6 py-8 space-y-6">
-
-            <!-- spinner -->
-            <div class="flex justify-center">
-                <div class="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
-            </div>
-
-            <!-- skeleton -->
-            <div class="animate-pulse space-y-4">
-                <div class="h-6 w-40 bg-white/10 rounded"></div>
-                <div class="h-40 bg-white/10 rounded-2xl"></div>
-
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    ${Array(6).fill(`
-                        <div class="h-28 bg-white/10 rounded-xl"></div>
-                    `).join("")}
-                </div>
-            </div>
-
-        </div>
-    `;
-}
-
-
 
 window.addEventListener("scroll", () => {
     const header = document.getElementById("shared-header");
