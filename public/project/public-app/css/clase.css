@@ -254,6 +254,7 @@ body {
     border-radius: var(--radius-btn);
 }
 
+
 .tab-btn {
     flex: 1;
     padding: 10px;
