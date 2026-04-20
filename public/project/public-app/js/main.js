@@ -289,7 +289,7 @@ allowfullscreen>
 
         async function toggleCurrentFavorite() {
             if (!currentUser) {
-                showLoginRequired();
+                openSales();
                 return;
             }
 
