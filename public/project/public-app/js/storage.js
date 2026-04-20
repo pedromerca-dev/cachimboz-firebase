@@ -108,13 +108,16 @@ export const Storage = {
     hasAccess() {
 
         const premium = Storage.getPremiumGlobal();
+        const courseExp = Storage.getCourseAccess();
+        const token = premium?.token || courseExp?.token;
 
-        if (premium?.exp) {
+        if (!token) return false;
+
+        if (premium?.vencimiento) {
             const expDate = new Date(premium.exp);
             if (expDate.getTime() >= Date.now()) return true;
         }
 
-        const courseExp = Storage.getCourseAccess();
 
         if (courseExp && new Date(courseExp).getTime() >= Date.now()) {
             return true;

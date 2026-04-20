@@ -58,18 +58,7 @@
             quiz: { q: [], current: 0, score: 0, mode: 'premium' },
             quizUsed: {}
         };
-
-
-        document.addEventListener('DOMContentLoaded', () => {
-
-            loadStorage();
-
-            fetchData();
-
-            //   renderSidebar();     
-
-            //  loadLesson(app.currentIdx, false); 
-        });
+ 
 
         function loadStorage() {
             const courseId = COURSE_ID;
@@ -537,6 +526,7 @@ allowfullscreen>
 
             const premium = Storage.getPremiumGlobal();
             const course = Storage.getCourseAccess();
+            const token = premium?.token || course?.token;
 
             if (!(currentUser && (premium?.token || course?.token))) {
                 openSales();
@@ -552,6 +542,7 @@ allowfullscreen>
                 const timeout = setTimeout(() => {
                     controller.abort();
                 }, 5000);
+       
 
                 const resp = await fetch(
                     "https://us-central1-cachimboz-pro.cloudfunctions.net/getSecurePDF",
@@ -783,6 +774,8 @@ allowfullscreen>
 
             onAuthStateChanged(auth, async (user) => {
 
+                currentUser = user;
+              
                 if (user) {
                     try {
                         const snap = await getDoc(doc(db, "users", user.uid));
@@ -823,6 +816,7 @@ allowfullscreen>
                                         await updateDoc(doc(db, 'users', user.uid), {
                                             isPremium: true
                                         });
+                                        updateUIState();
 
                                     } else {
                                         Storage.setCourseAccess({
@@ -830,6 +824,7 @@ allowfullscreen>
                                             vencimiento: verifyData.end || "",
                                             token: verifyData.token
                                         });
+                                        updateUIState();
 
                                         await updateDoc(doc(db, 'users', user.uid), {
                                             isPremium: false
@@ -852,7 +847,9 @@ allowfullscreen>
                         return;
                     }
                 }
-                currentUser = user;
+
+                loadStorage();
+                fetchData();
                 authChecked = true;
                 isAuthenticated = !!user;
                 updateAuthUIState();
@@ -1115,6 +1112,7 @@ allowfullscreen>
         }
 
         function updateActiveLesson() {
+
             document.querySelectorAll('.lesson-item')
                 .forEach(el => el.classList.remove('active'));
 
