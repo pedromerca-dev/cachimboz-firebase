@@ -784,7 +784,7 @@ allowfullscreen>
                             const email = user.email.toLowerCase();
 
                             if (!Storage.hasAccess() || !data?.isPremium){
-
+                          
                                 const result = await fetch(
                                     "https://us-central1-cachimboz-pro.cloudfunctions.net/verifyEmail",
                                     {

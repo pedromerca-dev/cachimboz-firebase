@@ -98,33 +98,41 @@ export const Storage = {
         return exp ? new Date(exp) : null;
     },
 
-    setCourseAccess({ email, vencimiento }) {
+    setCourseAccess({ email, vencimiento, token }) {
         if (!vencimiento) return;
 
         localStorage.setItem('access_email', email || '');
         localStorage.setItem('access_exp', vencimiento);
+
+        if (token) {
+            localStorage.setItem('course_token', token);
+        }
     },
-
     hasAccess() {
-
         const premium = Storage.getPremiumGlobal();
-        const courseExp = Storage.getCourseAccess();
-        const token = premium?.token || courseExp?.token;
+        const courseExp = localStorage.getItem('access_exp');
 
-        if (!token) return false;
 
-        if (premium?.vencimiento) {
+        if (premium?.token && premium?.exp) {
             const expDate = new Date(premium.exp);
-            if (expDate.getTime() >= Date.now()) return true;
+
+            if (expDate.getTime() >= Date.now()) {
+                return true;
+            }
         }
 
+        if (courseExp) {
+            const expDate = new Date(courseExp);
 
-        if (courseExp && new Date(courseExp).getTime() >= Date.now()) {
-            return true;
+            if (expDate.getTime() >= Date.now()) {
+                return true;
+            }
         }
 
         return false;
     },
+
+   
 
     /* =========================
    CLASS STATE (CLASE.HTML)
