@@ -33,20 +33,20 @@ function getCourseTitle() {
 const provider = new GoogleAuthProvider();
 
 window.startLogin = async function () {
-     await signInWithPopup(auth, provider);
+    await signInWithPopup(auth, provider);
 };
 
 window.logoutUser = async function () {
 
-   const ok = await showConfirmModal("¿Seguro que quieres cerrar sesión?");
-    
-    if (!ok) return; 
-   await signOut(auth);
+    const ok = await showConfirmModal("¿Seguro que quieres cerrar sesión?");
 
-        await showSuccessModal("Sesión cerrada correctamente 👋");
-      
-      
-   
+    if (!ok) return;
+    await signOut(auth);
+
+    await showSuccessModal("Sesión cerrada correctamente 👋");
+
+
+
 };
 
 window.goToProfile = function () {
@@ -108,8 +108,7 @@ export function renderHeader({ variant = "home" } = {}) {
         authHtml = `<button class="class-login-btn" onclick="startLogin()"><i class="fas fa-user"></i> Iniciar sesión</button>`;
     } else {
         const first = user.displayName ? user.displayName.split(" ")[0] : "Usuario";
-        const isPremium = store.user && window.Storage?.hasAccess();
-        const premiumLabel = isPremium ? "✔ Premium" : "❌ Sin premium";
+        const isPremium = store.user && window.Storage?.hasAccess(); 
 
         authHtml = `
             <div class="class-auth-user">
@@ -118,12 +117,42 @@ export function renderHeader({ variant = "home" } = {}) {
                     <span>${first}</span>
                     <i class="fas fa-caret-down"></i>
                 </button>
-                <div id="profile-dropdown" class="class-auth-dropdown">
-                    <div class="class-auth-status">${premiumLabel}</div>
-                    <button class="class-auth-item" onclick="goToProfile()">Mi perfil</button>
-                    ${isPremium ? "" : "<button class=\"class-auth-item\" onclick=\"window.location.href='paywalloficial.html'\">Contratar Premium</button>"}
-                    <button class="class-auth-item" onclick="logoutUser()">Cerrar sesión</button>
-                </div>
+               <div id="profile-dropdown" class="class-auth-dropdown">
+
+    <div class="dropdown-header">
+        <span class="status ${isPremium ? "premium" : "free"}">
+            ${isPremium ? "Premium activo" : "Plan gratuito"}
+        </span>
+    </div>
+
+    <button class="dropdown-item" onclick="goToProfile()">
+        <i class="fas fa-user"></i>
+        <div>
+            <span>Mi perfil</span>
+           
+        </div>
+    </button>
+
+    <div class="dropdown-divider"></div>
+
+    ${isPremium ? "" : `
+    <button class="dropdown-item highlight" onclick="window.location.href='paywalloficial.html'">
+        <i class="fas fa-crown"></i>
+        <div>
+             <span>Premium</span>
+            
+           
+        </div>
+    </button>`}
+
+    <div class="dropdown-divider"></div>
+
+    <button class="dropdown-item danger" onclick="logoutUser()">
+        <i class="fas fa-sign-out-alt"></i>
+        <div>
+        <span>Cerrar sesión</span>
+        </div>
+    </button>
             </div>
         `;
     }
@@ -131,7 +160,7 @@ export function renderHeader({ variant = "home" } = {}) {
     const favCount = document.getElementById('header-fav-count')?.textContent || 0;
     let extraButtons = "";
 
-    if (variant === "course" ) {
+    if (variant === "course") {
         extraButtons = `
      <a href="index.html" class="back-home-btn" title="Volver">
                     <i class="fas fa-arrow-left"></i>
@@ -169,5 +198,16 @@ export function renderHeader({ variant = "home" } = {}) {
         </div>
     `;
 
-  
+
 }
+
+document.addEventListener("click", (e) => {
+    const menu = document.getElementById("profile-dropdown");
+    const button = document.querySelector(".class-auth-btn");
+
+    if (!menu || !button) return;
+
+    if (!menu.contains(e.target) && !button.contains(e.target)) {
+        menu.classList.remove("show");
+    }
+});

@@ -89,6 +89,27 @@
 ================================ */
 
 #shared-header .class-login-btn,
+#shared-header .class-register-btn {
+    background: rgba(255, 255, 255, 0.15);
+
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    border-radius: 999px;
+    font-weight: 600;
+    display: inline-flex;
+    flex: none;
+    white-space: nowrap;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: all 0.25s ease;
+    font-size: 13px !important;
+    padding: 6px 14px;
+    height: 40px;
+    flex-shrink: 0;
+
+}
+
 .class-auth-btn {
     background: rgba(255, 255, 255, 0.15);
 
@@ -110,7 +131,7 @@
 
 }
 
-.class-auth-btn.active i {
+#shared-header .class-auth-btn.active i {
     transform: rotate(180deg);
 }
 
@@ -119,20 +140,19 @@
     gap: 8px;
 }
 
-.class-auth-btn:hover {
+#shared-header .class-auth-btn:hover {
     background: rgba(255, 255, 255, 0.25);
 }
-
-
 
 /* ================================
    AUTH USER
 ================================ */
-.class-auth-user {
+#shared-header .class-auth-user {
     position: relative;
+    display: inline-flex;
 }
 
-.class-auth-avatar {
+#shared-header .class-auth-avatar {
     width: 26px;
     height: 26px;
     border-radius: 999px;
@@ -143,51 +163,160 @@
     font-size: 12px;
 }
 
+#shared-header .class-auth-item {
+    border: none;
+    background: transparent;
+    color: white;
+    text-align: left;
+    padding: 10px 14px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#shared-header .class-auth-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
 /* ================================
    DROPDOWN
 ================================ */
-.class-auth-dropdown {
+
+#shared-header .class-auth-dropdown {
     position: absolute;
-    right: 0;
-    top: calc(100% + 6px);
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(100% + 8px);
+    width: 200px;
+    max-width: 90vw;
+    box-sizing: border-box;
 
-    background: rgba(20, 15, 50, 0.98);
-    border: 1px solid var(--header-border);
-    border-radius: 10px;
+    background: rgba(15, 10, 40, 0.85);
+    backdrop-filter: blur(25px);
 
-    width: 180px;
-    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+
+    padding: 10px;
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
 
     display: none;
-    flex-direction: column;
-
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-
-    right: 0;
-    z-index: 999;
 }
 
-.class-auth-user {
-    position: relative;
+#shared-header .class-auth-dropdown::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    right: auto;
+    width: 12px;
+    height: 12px;
+    background: rgba(15, 10, 40, 0.95);
+
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.class-auth-dropdown.show {
+#shared-header .class-auth-dropdown.show {
+    display: block;
+}
+
+#shared-header .dropdown-header {
+    padding: 14px 12px 8px;
+}
+
+#shared-header .dropdown-item.highlight {
+
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+
 }
 
-.class-auth-item {
-    padding: 10px 14px;
-    background: transparent;
-    border: none;
-    color: white;
+#shared-header .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+    min-height: 56px;
+    align-items: center;
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+
+
+}
+
+#shared-header .dropdown-item div {
+    justify-content: flex-start;
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+
+#shared-header .dropdown-item i {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+
+    flex-shrink: 0;
+}
+
+#shared-header .dropdown-item span {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    flex: 1;
     text-align: left;
-    cursor: pointer;
-    font-size: 13px;
 }
 
-.class-auth-item:hover {
+#shared-header .dropdown-item small {
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+#shared-header .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(4px);
+}
+
+#shared-header .dropdown-item:first-of-type span {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+#shared-header .dropdown-item.danger {
+    color: #ff6b6b;
+}
+
+#shared-header .dropdown-divider {
+    height: 1px;
     background: rgba(255, 255, 255, 0.08);
+    margin: 8px 0;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ================================
