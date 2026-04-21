@@ -133,9 +133,11 @@ export function renderHeader({ variant = "home" } = {}) {
         </div>
     </button>
 
-    <div class="dropdown-divider"></div>
 
     ${isPremium ? "" : `
+
+
+    <div class="dropdown-divider"></div>
     <button class="dropdown-item highlight" onclick="window.location.href='paywalloficial.html'">
         <i class="fas fa-crown"></i>
         <div>
