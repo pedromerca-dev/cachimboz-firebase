@@ -44,11 +44,11 @@ export function renderProfile(user) {
             <div class="grid gap-2 text-sm sm:grid-cols-2">
                 <div>
                     <span class="text-white/70">Universidad:</span><br>
-                    <strong>${university}</strong>
+                   <strong>${capitalize(university)}</strong>
                 </div>
                 <div>
                     <span class="text-white/70">Área:</span><br>
-                    <strong>${area}</strong>
+                   <strong>${capitalize(area)}</strong>
                 </div>
             </div>
         </div>
@@ -134,4 +134,9 @@ export function renderProfile(user) {
             renderProfile(user);
         };
     }
+}
+
+function capitalize(text) {
+    if (!text) return "";
+    return text.charAt(0).toUpperCase() + text.slice(1);
 }
