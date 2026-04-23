@@ -84,8 +84,24 @@ function showLoading() {
 
 window.toggleAuthMenu = function () {
     const menu = document.getElementById("profile-dropdown");
-    if (!menu) return;
+    const button = document.querySelector(".class-auth-btn");
+    const modalRoot = document.getElementById("modal-root");
+
+    if (!menu || !button || !modalRoot) return;
+
     menu.classList.toggle("show");
+
+    if (menu.classList.contains("show")) {
+        modalRoot.appendChild(menu);
+
+        const rect = button.getBoundingClientRect();
+
+        menu.style.position = "fixed";
+        menu.style.top = rect.bottom + 8 + "px";
+        menu.style.left = rect.left + rect.width / 2 + "px";
+        menu.style.transform = "translateX(-50%)";
+        menu.style.zIndex = "9999999";
+    }
 };
 
 export function renderHeader({ variant = "home" } = {}) {
