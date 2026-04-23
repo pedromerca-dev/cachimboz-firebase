@@ -27,7 +27,8 @@
 html,
 body {
     height: 100%;
-    overflow-x: hidden;
+    overflow-x: auto;
+    overflow-y: auto;
     font-size: 14px;
 }
 
@@ -36,6 +37,9 @@ body {
     max-width: 950px;
     margin: 0 auto;
     padding: 16px 12px;
+    overflow: visible;
+    position: static;
+    transform: none;
 
 }
 
@@ -46,7 +50,7 @@ body {
     color: white;
     min-height: 100vh;
     min-height: 100vh;
-    overflow-y: hidden;
+    overflow-y: auto;
 
 }
 
@@ -330,7 +334,7 @@ body {
     box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
     border-bottom: 1px solid var(--border);
     border-radius: 12px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 #video-container {
@@ -1078,6 +1082,7 @@ h2 {
 @media (max-width: 480px) {
     .video-wrapper {
         border-radius: 10px;
+        overflow: visible;
     }
 
     .action-card {
